@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini ERP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>tailwind.config = { darkMode: 'class' }</script>
+  <style>
+    html {
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+    .tab-btn {
+      background-color: white;
+      border: 1px solid #3b82f6;
+      color: #2563eb;
+      padding: 0.5rem 1.25rem;
+      font-weight: 500;
+      border-radius: 0.75rem;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+    .tab-btn:hover {
+      background-color: #eff6ff;
+    }
+    .card {
+      border-radius: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      margin-bottom: 2.5rem;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #1d4ed8;
+      margin-bottom: 1rem;
+    }
+    .form-box {
+      display: grid;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .input {
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      outline: none;
+      transition: box-shadow 0.3s, background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+    .input:focus {
+      box-shadow: 0 0 0 2px #93c5fd;
+    }
+    .btn {
+      background-color: #2563eb;
+      color: white;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .btn:hover {
+      background-color: #1e40af;
+    }
+  </style>
+</head>
+<body class="transition-colors duration-500 ease-in-out bg-gradient-to-br from-slate-100 to-blue-100 dark:from-zinc-900 dark:to-zinc-800 text-gray-900 dark:text-gray-100 font-[Inter] min-h-screen">
+  <div class="max-w-5xl mx-auto py-12 px-6">
+    <h1 class="text-4xl font-bold text-center text-blue-700 dark:text-blue-300 mb-10 drop-shadow-sm">Mini ERP ✨</h1>
+
+    <div class="flex justify-center items-center gap-3 mb-6">
+      <button onclick="mostrar('clientes')" class="tab-btn">Clientes</button>
+      <button onclick="mostrar('produtos')" class="tab-btn">Produtos</button>
+      <button onclick="mostrar('pedidos')" class="tab-btn">Pedidos</button>
+      <button onclick="alternarTema()" class="ml-4 px-3 py-2 rounded text-sm bg-zinc-200 dark:bg-zinc-700 dark:text-white hover:brightness-105">
+        🌞 / 🌙
+      </button>
+    </div>
+
+<div id="dashboard" class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-4 mb-10 text-center">
+      <div class="bg-white dark:bg-zinc-800 rounded-xl shadow p-4">
+        <h3 class="text-gray-600 dark:text-gray-300">Clientes</h3>
+        <p id="dashClientes" class="text-2xl font-bold text-blue-700 dark:text-blue-300">0</p>
+      </div>
+      <div class="bg-white dark:bg-zinc-800 rounded-xl shadow p-4">
+        <h3 class="text-gray-600 dark:text-gray-300">Produtos</h3>
+        <p id="dashProdutos" class="text-2xl font-bold text-green-600 dark:text-green-300">0</p>
+      </div>
+      <div class="bg-white dark:bg-zinc-800 rounded-xl shadow p-4">
+        <h3 class="text-gray-600 dark:text-gray-300">Pedidos</h3>
+        <p id="dashPedidos" class="text-2xl font-bold text-purple-600 dark:text-purple-300">0</p>
+      </div>
+    </div>
+
+      <div class="bg-white dark:bg-zinc-800 rounded-xl shadow p-4">
+        <h3 class="text-gray-600 dark:text-gray-300">Faturamento Total</h3>
+          <p id="dashFaturamento" class="text-2xl font-bold text-emerald-600 dark:text-emerald-300">R$ 0</p>
+      </div>
+      <div class="bg-white dark:bg-zinc-800 rounded-xl shadow p-4">
+        <h3 class="text-gray-600 dark:text-gray-300">Produto Mais Vendido</h3>
+          <p id="dashMaisVendido" class="text-lg font-semibold text-pink-600 dark:text-pink-300">–</p>
+      </div>
+
+
+    <div id="clientes" class="tab hidden">
+      <div class="card dark:bg-zinc-800">
+        <h2 class="card-title">Cadastro de Clientes</h2>
+        <form id="formCliente" class="form-box">
+          <input placeholder="Nome" name="nome" required class="input bg-white dark:bg-zinc-900 dark:border-zinc-700 dark:text-white" />
+          <input placeholder="Email" name="email" required class="input bg-white dark:bg-zinc-900 dark:border-zinc-700 dark:text-white" />
+          <input placeholder="Telefone" name="telefone" class="input bg-white dark:bg-zinc-900 dark:border-zinc-700 dark:text-white" />
+          <button type="submit" class="btn dark:bg-blue-500 dark:hover:bg-blue-600">Adicionar Cliente</button>
+        </form>
+        <input type="text" id="buscaCliente" placeholder="🔍 Buscar cliente..." class="input mb-2 bg-white dark:bg-zinc-900 dark:border-zinc-700 dark:text-white" />
+        <ul id="listaClientes" class="list divide-y divide-gray-200 dark:divide-zinc-600 text-sm text-gray-700 dark:text-gray-100"></ul>
+      </div>
+    </div>
+
+    <div id="produtos" class="tab hidden">
+      <div class="card dark:bg-zinc-800">
+        <h2 class="card-title">Cadastro de Produtos</h2>
+        <form id="formProduto" class="form-box">
+          <input placeholder="Nome" name="nome" required class="input bg-white dark:bg-zinc-900 dark:border-zinc-700 dark:text-white" />
+          <input placeholder="Preço" name="preco" type="number" step="0.01" required class="input bg-white dark:bg-zinc-900 dark:border-zinc-700 dark:text-white" />
+          <input placeholder="Estoque" name="estoque" type="number" required class="input bg-white dark:bg-zinc-900 dark:border-zinc-700 dark:text-white" />
+          <button type="submit" class="btn dark:bg-blue-500 dark:hover:bg-blue-600">Adicionar Produto</button>
+        </form>
+        <input type="text" id="buscaProduto" placeholder="🔍 Buscar produto..." class="input mb-2 bg-white dark:bg-zinc-900 dark:border-zinc-700 dark:text-white" />
+        <ul id="listaProdutos" class="list divide-y divide-gray-200 dark:divide-zinc-600 text-sm text-gray-700 dark:text-gray-100"></ul>
+      </div>
+    </div>
+
+    <div id="pedidos" class="tab hidden">
+      <div class="card dark:bg-zinc-800">
+        <h2 class="card-title">Registrar Pedido</h2>
+        <form id="formPedido" class="form-box">
+          <input placeholder="ID do Cliente" name="clienteId" type="number" required class="input bg-white dark:bg-zinc-900 dark:border-zinc-700 dark:text-white" />
+          <textarea name="itens" placeholder='[{"produtoId":1,"quantidade":2}]' required class="input h-28 resize-none bg-white dark:bg-zinc-900 dark:border-zinc-700 dark:text-white"></textarea>
+          <button type="submit" class="btn dark:bg-blue-500 dark:hover:bg-blue-600">Criar Pedido</button>
+        </form>
+        <ul id="listaPedidos" class="list divide-y divide-gray-200 dark:divide-zinc-600 text-sm text-gray-700 dark:text-gray-100"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function mostrar(id) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function alternarTema() {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('modoEscuro', document.documentElement.classList.contains('dark'));
+    }
+
+    window.onload = () => {
+      if (localStorage.getItem('modoEscuro') === 'true') {
+        document.documentElement.classList.add('dark');
+      }
+    };
+  </script>
+
+  <script src="js/dashboard.js"></script>
+  <script src="js/cliente.js"></script>
+  <script src="js/produto.js"></script>
+  <script src="js/pedido.js"></script>
+
+</body>
+</html>

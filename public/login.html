@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Mini ERP</title>
+  <style>
+    body { font-family: sans-serif; max-width: 400px; margin: 50px auto; }
+    input { display: block; margin-bottom: 10px; padding: 8px; width: 100%; }
+    button { padding: 10px; width: 100%; background-color: #2563eb; color: white; border: none; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h2>Registrar Usuário</h2>
+  <input type="text" id="nome" placeholder="Nome">
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="senha" placeholder="Senha">
+  <button onclick="registrar()">Registrar</button>
+
+  <h2>Login</h2>
+  <input type="email" id="emailLogin" placeholder="Email">
+  <input type="password" id="senhaLogin" placeholder="Senha">
+  <button onclick="login()">Entrar</button>
+
+  <p id="resposta" style="margin-top: 15px; font-weight: bold;"></p>
+
+  <script>
+    async function registrar() {
+      const nome = document.getElementById('nome').value;
+      const email = document.getElementById('email').value;
+      const senha = document.getElementById('senha').value;
+
+      const res = await fetch('/usuarios/registrar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome, email, senha })
+      });
+
+      const data = await res.json();
+      document.getElementById('resposta').textContent = res.ok ? 'Usuário criado!' : (data.erro || 'Erro');
+    }
+
+    async function login() {
+      const email = document.getElementById('emailLogin').value;
+      const senha = document.getElementById('senhaLogin').value;
+
+      const res = await fetch('/usuarios/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, senha })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        document.getElementById('resposta').textContent = 'Login ok! Token: ' + data.token;
+        localStorage.setItem('token', data.token);
+      } else {
+        document.getElementById('resposta').textContent = data.erro || 'Erro no login';
+      }
+    }
+  </script>
+</body>
+</html>

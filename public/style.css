@@ -1,0 +1,33 @@
+body {
+  font-family: Arial;
+  padding: 20px;
+  background: #f7f7f7;
+}
+
+nav button {
+  margin-right: 10px;
+}
+
+.aba {
+  margin-top: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+form input, form textarea {
+  display: block;
+  margin: 5px 0;
+  padding: 8px;
+  width: 300px;
+}
+
+.card,
+.input,
+.btn,
+.tab-btn {
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+ 
